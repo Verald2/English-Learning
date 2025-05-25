@@ -92,7 +92,15 @@
   }
   #dark-mode-toggle:hover {
     background: var(--header-text);
-    color: var(--header-bg);
+  }
+
+  #dark-mode-toggle span {
+    color: rgba(255,255,255,1);
+    transition-duration: 300ms;
+  }
+  #dark-mode-toggle:hover span {
+    background: var(--header-bg);
+    background-clip: text;
   }
 
   main {
@@ -271,7 +279,7 @@
 <header>
   <h1>Inglisz Machen</h1>
   <p>Platforma do nauki Gramatyki i Słownictwa</p>
-  <button id="dark-mode-toggle" aria-label="Toggle dark mode">Dark Mode</button>
+  <button id="dark-mode-toggle" aria-label="Toggle dark mode"><span>Dark Mode</span></button>
 </header>
 <main>
   <section id="vocabulary">
