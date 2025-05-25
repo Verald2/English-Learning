@@ -332,13 +332,13 @@
   // Load saved theme preference
   if(localStorage.getItem('dark-theme') === 'enabled') {
     body.classList.add('dark-theme');
-    toggleBtn.textContent = 'Light Mode';
+    toggleBtn.innerHTML = '<span>Light Mode</span>';
   }
 
   toggleBtn.addEventListener('click', () => {
     body.classList.toggle('dark-theme');
     const darkModeEnabled = body.classList.contains('dark-theme');
-    toggleBtn.textContent = darkModeEnabled ? 'Light Mode' : 'Dark Mode';
+    toggleBtn.innerHTML = darkModeEnabled ? '<span>Light Mode</span>' : '<span>Dark Mode</span>';
     localStorage.setItem('dark-theme', darkModeEnabled ? 'enabled' : 'disabled');
   });
 
