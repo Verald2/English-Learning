@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Inglisz Machen</title>
+<style>
+  /* CSS variables for light and dark themes */
+  :root {
+    --bg-color: #f5f9ff;
+    --text-color: #212121;
+    --header-bg: linear-gradient(135deg, #3a86ff, #8338ec);
+    --header-text: white;
+    --section-bg: white;
+    --section-shadow: rgba(0,0,0,0.07);
+    --primary-color: #3a86ff;
+    --secondary-color: #8338ec;
+    --vocab-bg: #e0f0ff;
+    --vocab-hover-bg: #a8d0ff;
+    --button-bg: #3a86ff;
+    --button-hover-bg: #8338ec;
+    --border-color: #ddd;
+    --quiz-answer-bg: #3a86ff;
+    --quiz-answer-border: #3a86ff;
+    --quiz-answer-hover-bg: #8338ec;
+  }
+
+  body.dark-theme {
+    --bg-color: #121217;
+    --text-color: #e0e0e0;
+    --header-bg: linear-gradient(135deg, #6a5acd, #4b0082);
+    --header-text: #ddd;
+    --section-bg: #22222b;
+    --section-shadow: rgba(0,0,0,0.8);
+    --primary-color: #6a5acd;
+    --secondary-color: #4b0082;
+    --vocab-bg: #3a3a4f;
+    --vocab-hover-bg: #555581;
+    --button-bg: #4b0082;
+    --button-hover-bg: #6a5acd;
+    --border-color: #444455;
+    --quiz-answer-bg: #6a5acd;
+    --quiz-answer-border: #6a5acd;
+    --quiz-answer-hover-bg: #4b0082;
+  }
+
+  /* Reset and global */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  header {
+    background: var(--header-bg);
+    color: var(--header-text);
+    padding: 2rem 1rem;
+    text-align: center;
+    box-shadow: 0 4px 10px var(--section-shadow);
+    position: relative;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 2.8rem;
+    letter-spacing: 2px;
+  }
+  header p {
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+    font-weight: 300;
+  }
+
+  /* Dark mode toggle button */
+  #dark-mode-toggle {
+    position: absolute;
+    top: 1.75rem;
+    right: 1.5rem;
+    background: transparent;
+    border: 2px solid var(--header-text);
+    color: var(--header-text);
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  #dark-mode-toggle:hover {
+    background: var(--header-text);
+    color: var(--header-bg);
+  }
+
+  main {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem 4rem;
+  }
+  section {
+    background: var(--section-bg);
+    margin-bottom: 2rem;
+    padding: 1.8rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px var(--section-shadow);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  section h2 {
+    color: var(--primary-color);
+    margin-top: 0;
+    border-bottom: 3px solid var(--primary-color);
+    padding-bottom: 6px;
+    font-size: 1.8rem;
+  }
+  /* Vocabulary Section */
+  .tabs {
+    display: flex;
+    border-bottom: 3px solid var(--primary-color);
+    margin-bottom: 1rem;
+    user-select: none;
+  }
+  .tab {
+    padding: 0.7rem 1.5rem;
+    margin-right: 0.5rem;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+    background: var(--vocab-bg);
+    color: var(--primary-color);
+    font-weight: 600;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .tab:hover {
+    background: var(--vocab-hover-bg);
+  }
+  .tab.active {
+    background: var(--section-bg);
+    color: var(--secondary-color);
+    border-bottom: 3px solid var(--section-bg);
+    font-weight: 700;
+    box-shadow: 0 -4px 10px rgba(131,56,236,0.4);
+  }
+  .vocab-list {
+    list-style: none;
+    padding-left: 0;
+    max-height: 320px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    transition: border-color 0.3s ease;
+  }
+  .vocab-list li {
+    background: var(--vocab-bg);
+    margin: 0.5rem 0;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: default;
+    transition: background 0.3s ease;
+  }
+  .vocab-list li:hover {
+    background: var(--vocab-hover-bg);
+  }
+  .vocab-list button {
+    background: var(--button-bg);
+    border: none;
+    color: white;
+    border-radius: 5px;
+    padding: 0.4rem 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .vocab-list button:hover {
+    background: var(--button-hover-bg);
+  }
+
+  /* Grammar Section */
+  .grammar-tips {
+    line-height: 1.5;
+  }
+  .grammar-tips ul {
+    margin: 0.5rem 0 0 1.4rem;
+  }
+  .grammar-tips li {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Quiz Section */
+  .quiz-question {
+    font-size: 1.1rem;
+    margin-bottom: 0.6rem;
+  }
+  .quiz-options {
+    list-style: none;
+    padding-left: 0;
+  }
+  .quiz-options li {
+    margin-bottom: 0.6rem;
+  }
+  .quiz-options label {
+    cursor: pointer;
+    user-select: none;
+    display: block;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    border: 2px solid var(--quiz-answer-border);
+    transition: background 0.3s, border-color 0.3s;
+    color: var(--text-color);
+  }
+  .quiz-options input[type="radio"] {
+    display: none;
+  }
+  .quiz-options input[type="radio"]:checked + label {
+    background: var(--quiz-answer-bg);
+    color: white;
+    border-color: var(--quiz-answer-border);
+  }
+  button.check-answer {
+    margin-top: 1rem;
+    background: var(--button-bg);
+    color: white;
+    font-weight: 700;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgb(58 134 255 / 0.6);
+    transition: background 0.3s ease;
+  }
+  button.check-answer:hover {
+    background: var(--button-hover-bg);
+  }
+  .quiz-result {
+    margin-top: 1rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+    min-height: 1.4em;
+  }
+  footer {
+    text-align: center;
+    color: #777;
+    font-size: 0.9rem;
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    transition: color 0.3s ease, border-color 0.3s ease;
+  }
+
+  @media (max-width: 600px) {
+    header h1 {
+      font-size: 2rem;
+    }
+    main {
+      margin: 1rem;
+    }
+    .tabs {
+      flex-wrap: wrap;
+    }
+    .tab {
+      margin-bottom: 0.5rem;
+    }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Inglisz Machen</h1>
+  <p>Platforma do nauki Gramatyki i Słownictwa</p>
+  <button id="dark-mode-toggle" aria-label="Toggle dark mode">Dark Mode</button>
+</header>
+<main>
+  <section id="vocabulary">
+    <h2>Vocabulary Builder</h2>
+    <p>Choose a category and click the "Show Meaning" button to reveal the meaning of each English word.</p>
+    <div class="tabs" id="vocab-tabs">
+      <!-- Tabs dynamically inserted here -->
+    </div>
+    <ul class="vocab-list" id="vocab-list">
+      <!-- Vocabulary items will be dynamically inserted here -->
+    </ul>
+    <p id="vocab-meaning-display" style="margin-top:1rem; font-style: italic; color: var(--text-color);"></p>
+  </section>
+
+  <section id="grammar">
+    <h2>Grammar Tips</h2>
+    <div class="grammar-tips">
+      <ul>
+        <li><strong>Subject-Verb Agreement:</strong> A singular subject takes a singular verb, and a plural subject takes a plural verb.</li>
+        <li><strong>Use of Articles:</strong> "A" and "An" are used for indefinite singular nouns; "The" is used for definite nouns.</li>
+        <li><strong>Present Perfect Tense:</strong> Used for actions that happened at an unspecified time or started in the past and continue now (e.g., "I have lived here for five years").</li>
+        <li><strong>Modal Verbs:</strong> Can, could, may, might, must, shall, should, will, would express ability, possibility, permission, or obligation.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <h2>Quick English Quiz</h2>
+    <p class="quiz-question" id="quiz-question">1. Choose the correct word to complete the sentence: "She _____ to school every day."</p>
+    <ul class="quiz-options">
+      <li><input type="radio" id="q1a" name="q1" value="go"><label for="q1a">go</label></li>
+      <li><input type="radio" id="q1b" name="q1" value="goes"><label for="q1b">goes</label></li>
+      <li><input type="radio" id="q1c" name="q1" value="going"><label for="q1c">going</label></li>
+      <li><input type="radio" id="q1d" name="q1" value="gone"><label for="q1d">gone</label></li>
+    </ul>
+    <button class="check-answer" id="check-answer-btn">Check Answer</button>
+    <p class="quiz-result" id="quiz-result"></p>
+  </section>
+</main>
+<footer>
+  &copy; 2025 Verald. Wszytkie prawa zastrzeżone.
+</footer>
+
+<script>
+  // Handle dark theme toggle
+  const toggleBtn = document.getElementById('dark-mode-toggle');
+  const body = document.body;
+
+  // Load saved theme preference
+  if(localStorage.getItem('dark-theme') === 'enabled') {
+    body.classList.add('dark-theme');
+    toggleBtn.textContent = 'Light Mode';
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    body.classList.toggle('dark-theme');
+    const darkModeEnabled = body.classList.contains('dark-theme');
+    toggleBtn.textContent = darkModeEnabled ? 'Light Mode' : 'Dark Mode';
+    localStorage.setItem('dark-theme', darkModeEnabled ? 'enabled' : 'disabled');
+  });
+
+  // Vocabulary database with categories as keys
+  const vocabularyDatabase = {
+    "Basic": [
+      {word: "Abundant", meaning: "Existing or available in large quantities; plentiful."},
+      {word: "Brilliant", meaning: "Exceptionally clever or talented."},
+      {word: "Compassion", meaning: "Sympathetic pity and concern for the sufferings or misfortunes of others."},
+      {word: "Diligent", meaning: "Having or showing care and conscientiousness in one's work or duties."},
+      {word: "Enthusiastic", meaning: "Having or showing intense and eager enjoyment, interest, or approval."}
+    ],
+    "Intermediate": [
+      {word: "Fragrant", meaning: "Having a pleasant or sweet smell."},
+      {word: "Grateful", meaning: "Feeling or showing thanks."},
+      {word: "Humble", meaning: "Having or showing a modest view of one's importance."},
+      {word: "Innovative", meaning: "Featuring new methods; advanced and original."},
+      {word: "Joyful", meaning: "Feeling, expressing, or causing great pleasure and happiness."}
+    ],
+    "Advanced": [
+      {word: "Meticulous", meaning: "Showing great attention to detail; very careful and precise."},
+      {word: "Nurture", meaning: "Care for and encourage the growth or development of."},
+      {word: "Optimistic", meaning: "Hopeful and confident about the future."},
+      {word: "Persistent", meaning: "Continuing firmly or obstinately in a course of action despite difficulty."},
+      {word: "Quest", meaning: "A long or arduous search for something."}
+    ],
+    "Business": [
+      {word: "Reliable", meaning: "Consistently good in quality or performance; able to be trusted."},
+      {word: "Serene", meaning: "Calm, peaceful, and untroubled."},
+      {word: "Tangible", meaning: "Perceptible by touch; clear and definite; real."},
+      {word: "Delegate", meaning: "To entrust a task or responsibility to another person."},
+      {word: "Consensus", meaning: "General agreement among a group or community."}
+    ]
+  };
+
+  const vocabTabsEl = document.getElementById('vocab-tabs');
+  const vocabListEl = document.getElementById('vocab-list');
+  const meaningDisplay = document.getElementById('vocab-meaning-display');
+
+  let activeCategory = Object.keys(vocabularyDatabase)[0];
+
+  // Generate tabs
+  function generateTabs() {
+    vocabTabsEl.innerHTML = '';
+    Object.keys(vocabularyDatabase).forEach(category => {
+      const tab = document.createElement('div');
+      tab.classList.add('tab');
+      tab.textContent = category;
+      if (category === activeCategory) {
+        tab.classList.add('active');
+      }
+      tab.addEventListener('click', () => {
+        if (category !== activeCategory) {
+          activeCategory = category;
+          updateActiveTab();
+          loadVocabularyList(category);
+          meaningDisplay.textContent = '';
+        }
+      });
+      vocabTabsEl.appendChild(tab);
+    });
+  }
+
+  // Highlight active tab
+  function updateActiveTab() {
+    Array.from(vocabTabsEl.children).forEach(tabEl => {
+      tabEl.classList.toggle('active', tabEl.textContent === activeCategory);
+    });
+  }
+
+  // Load vocabulary list for a category
+  function loadVocabularyList(category) {
+    vocabListEl.innerHTML = '';
+    vocabularyDatabase[category].forEach(({word, meaning}) => {
+      const li = document.createElement('li');
+      const wordSpan = document.createElement('span');
+      wordSpan.textContent = word;
+
+      const btn = document.createElement('button');
+      btn.textContent = "Show Meaning";
+      btn.dataset.meaning = meaning;
+
+      btn.addEventListener('click', () => {
+        meaningDisplay.textContent = meaning;
+        // Highlight selected button
+        Array.from(vocabListEl.querySelectorAll('button')).forEach(b => {
+          b.style.backgroundColor = 'var(--button-bg)';
+        });
+        btn.style.backgroundColor = 'var(--secondary-color)';
+      });
+
+      li.appendChild(wordSpan);
+      li.appendChild(btn);
+      vocabListEl.appendChild(li);
+    });
+  }
+
+  // Initialize vocabulary tabs and list
+  generateTabs();
+  loadVocabularyList(activeCategory);
+
+  // Quiz Logic
+  const quizData = [
+    {
+      question: "Choose the correct word to complete the sentence: \"She _____ to school every day.\"",
+      options: ["go", "goes", "going", "gone"],
+      correct: "goes"
+    },
+    {
+      question: "Select the correct past tense of 'eat':",
+      options: ["ate", "eated", "eaten", "eat"],
+      correct: "ate"
+    },
+    {
+      question: "What is the plural form of 'child'?",
+      options: ["childs", "childes", "children", "child"],
+      correct: "children"
+    }
+  ];
+
+  let currentQuestion = 0;
+
+  const quizQuestionEl = document.getElementById('quiz-question');
+  const quizOptionsEl = document.querySelector('.quiz-options');
+  const checkAnswerBtn = document.getElementById('check-answer-btn');
+  const quizResultEl = document.getElementById('quiz-result');
+
+  function loadQuizQuestion(index) {
+    const q = quizData[index];
+    quizQuestionEl.textContent = (index + 1) + '. ' + q.question;
+    quizResultEl.textContent = '';
+    // Clear selected options
+    quizOptionsEl.innerHTML = '';
+    q.options.forEach((option, idx) => {
+      const optionId = 'q' + (index + 1) + String.fromCharCode(97 + idx);
+      const li = document.createElement('li');
+
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.id = optionId;
+      input.name = 'q' + (index + 1);
+      input.value = option;
+
+      const label = document.createElement('label');
+      label.htmlFor = optionId;
+      label.textContent = option;
+
+      li.appendChild(input);
+      li.appendChild(label);
+      quizOptionsEl.appendChild(li);
+    });
+  }
+
+  checkAnswerBtn.addEventListener('click', () => {
+    const selectedOption = document.querySelector('input[name="q' + (currentQuestion+1) + '"]:checked');
+    if (!selectedOption) {
+      quizResultEl.style.color = 'red';
+      quizResultEl.textContent = 'Please select an answer before checking.';
+      return;
+    }
+    if (selectedOption.value === quizData[currentQuestion].correct) {
+      quizResultEl.style.color = 'green';
+      quizResultEl.textContent = 'Correct! 🎉';
+    } else {
+      quizResultEl.style.color = 'red';
+      quizResultEl.textContent = 'Oops! The correct answer is "' + quizData[currentQuestion].correct + '".';
+    }
+    if (currentQuestion < quizData.length - 1) {
+      currentQuestion++;
+      setTimeout(() => {
+        loadQuizQuestion(currentQuestion);
+      }, 2000);
+    } else {
+      setTimeout(() => {
+        quizResultEl.style.color = 'var(--text-color)';
+        quizResultEl.textContent = 'Quiz completed! Restarting...';
+        currentQuestion = 0;
+        loadQuizQuestion(currentQuestion);
+      }, 3000);
+    }
+  });
+
+  // Initialize first quiz question on load
+  loadQuizQuestion(currentQuestion);
+</script>
+</body>
+</html>
